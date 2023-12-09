@@ -66,7 +66,7 @@ void print5x5(int rozmiar_tablicy, char** tablica_zgadywanek, string gora, strin
     cout<< "+---+---+---+---+---+---+---+"<<endl;
     cout<< "    | "<<dol[0]<<" | "<<dol[1]<<" | "<<dol[2]<<" | "<<dol[3]<<" | "<<dol[4]<<" |"<<endl;
     cout<< "    +---+---+---+---+---+    "<< endl;
-
+    cout << "x: " << focusedX << " y: " << focusedY << endl;
 }
 
 void print8x8(int rozmiar_tablicy, char** tablica_zgadywanek, string gora, string dol, string prawa, string lewa, int focusedX, int focusedY)
@@ -92,6 +92,7 @@ void print8x8(int rozmiar_tablicy, char** tablica_zgadywanek, string gora, strin
     cout<< "+---+---+---+---+---+---+---+---+---+---+"<<endl;
     cout<< "    | "<<dol[0]<<" | "<<dol[1]<<" | "<<dol[2]<<" | "<<dol[3]<<" | "<<dol[4]<<" | "<<dol[5]<<" | "<<dol[6]<<" | "<<dol[7]<<" | "<<dol[8]<<endl;
     cout<< "    +---+---+---+---+---+---+---+---+    "<< endl;
+    cout << "x: " << focusedX << " y: " << focusedY << endl;
 }
 
 void print10x10(int rozmiar_tablicy, char** tablica_zgadywanek, string gora, string dol, string prawa, string lewa, int focusedX, int focusedY)
@@ -121,6 +122,7 @@ void print10x10(int rozmiar_tablicy, char** tablica_zgadywanek, string gora, str
     cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
     cout<< "    | "<<dol[0]<<" | "<<dol[1]<<" | "<<dol[2]<<" | "<<dol[3]<<" | "<<dol[4]<<" | "<<dol[5]<<" | "<<dol[6]<<" | "<<dol[7]<<" | "<<dol[8]<<" | " << dol[9] << " |"<<endl;
     cout<< "    +---+---+---+---+---+---+---+---+---+---+    "<< endl;
+    cout << "x: " << focusedX << " y: " << focusedY << endl;
 }
 
 int menu()
@@ -164,6 +166,9 @@ void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_
         prawa += ' ';
         lewa += ' ';
     }
+
+    vector<pair<int, int>> undo;
+    vector<pair<int, int>> redo;
 
     while (true)
     {
@@ -218,19 +223,31 @@ void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_
                 }
                 case 'U':
                 {
-                    // do zrobienia
-                    // undo
+                    if (!undo.empty())
+                    {
+                        tablica_zgadywanek[undo.back().second][undo.back().first] = ' ';
+                        redo.push_back(undo.back());
+                        undo.erase(undo.end() - 1);
+                    }
                     break;
                 }
                 case 'R':
                 {
-                    // do zrobienia
-                    // redo
+                    if (!redo.empty())
+                    {
+                        tablica_zgadywanek[redo.back().second][redo.back().first] = 'o';
+                        undo.push_back(redo.back());
+                        redo.erase(redo.end() - 1);
+                    }
                     break;
                 }
                 case 'O':
                 {
                     tablica_zgadywanek[focusedY][focusedX] = 'o';
+                    pair<int, int> p;
+                    p.first = focusedX;
+                    p.second = focusedY;
+                    undo.push_back(p);
                     break;
                 }
                 case 'K':
