@@ -24,9 +24,9 @@ char** tworzenie_tablicy_dwu_wymiarowej(int rozmiar_tablicy)
 char** losuj(int rozmiar_tablicy, char** tablica, int ile)
 {
     vector<pair<int, int>>wszystkie_mozliwe_pary;
-    for(int i=0;i<rozmiar_tablicy; i++)
+    for(int i=1;i<rozmiar_tablicy - 1; i++)
     {
-        for(int j=0; j< rozmiar_tablicy; j++)
+        for(int j=1; j< rozmiar_tablicy - 1; j++)
         {
             pair<int,int>para;
             para.first=i;
@@ -40,7 +40,7 @@ char** losuj(int rozmiar_tablicy, char** tablica, int ile)
     srand(time(NULL));
     for(int i = 0; i<ile; i++)
     {
-        int losownie_par=rand()% wszystkie_mozliwe_pary.size();
+        int losownie_par=rand() % wszystkie_mozliwe_pary.size();
         pair<int,int> c = wszystkie_mozliwe_pary[losownie_par];
         tablica[c.first][c.second] = 'o';
         wszystkie_mozliwe_pary.erase(wszystkie_mozliwe_pary.begin()+losownie_par);
@@ -49,79 +49,92 @@ char** losuj(int rozmiar_tablicy, char** tablica, int ile)
     return tablica;
 }
 
-void print5x5(int rozmiar_tablicy, char** tablica_zgadywanek, string gora, string dol, string prawa, string lewa, int focusedX, int focusedY)
+char** stala_tablica(int rozmiar_tablicy, char** tablica, int ile)
 {
-    cout<< "    +---+---+---+---+---+    "<< endl;
-    cout<< "    | "<<gora[0]<<" | "<<gora[1]<<" | "<<gora[2]<<" | "<<gora[3]<<" | "<<gora[4]<<" |"<<endl;
-    cout<< "+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[0][0]<<" | "<< tablica_zgadywanek[0][1]<<" | "<< tablica_zgadywanek[0][2]<<" | "<< tablica_zgadywanek[0][3]<<" | "<< tablica_zgadywanek[0][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[1][0]<<" | "<< tablica_zgadywanek[1][1]<<" | "<< tablica_zgadywanek[1][2]<<" | "<< tablica_zgadywanek[1][3]<<" | "<< tablica_zgadywanek[1][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[2][0]<<" | "<< tablica_zgadywanek[2][1]<<" | "<< tablica_zgadywanek[2][2]<<" | "<< tablica_zgadywanek[2][3]<<" | "<< tablica_zgadywanek[2][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[3][0]<<" | "<< tablica_zgadywanek[3][1]<<" | "<< tablica_zgadywanek[3][2]<<" | "<< tablica_zgadywanek[3][3]<<" | "<< tablica_zgadywanek[3][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[4][0]<<" | "<< tablica_zgadywanek[4][1]<<" | "<< tablica_zgadywanek[4][2]<<" | "<< tablica_zgadywanek[4][3]<<" | "<< tablica_zgadywanek[4][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+"<<endl;
-    cout<< "    | "<<dol[0]<<" | "<<dol[1]<<" | "<<dol[2]<<" | "<<dol[3]<<" | "<<dol[4]<<" |"<<endl;
-    cout<< "    +---+---+---+---+---+    "<< endl;
+    tablica[1][2] = 'o';
+    tablica[2][2] = 'o';
+    return tablica;
+}
+
+char** wypelnij_tablice(int rozmiar_tablicy, char** tablica, int ile)
+{
+    // return losuj(rozmiar_tablicy, tablica, ile);
+    return stala_tablica(rozmiar_tablicy, tablica, ile);
+}
+
+void print5x5(int rozmiar_tablicy, char** tablica_zgadywanek, int focusedX, int focusedY)
+{
+    cout << "    +---+---+---+---+---+    " << endl;
+    cout << "    | " << tablica_zgadywanek[0][1] << " | " << tablica_zgadywanek[0][2] << " | " << tablica_zgadywanek[0][3] << " | " << tablica_zgadywanek[0][4] << " | " << tablica_zgadywanek[0][5] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[1][0] << " | " << tablica_zgadywanek[1][1] << " | " << tablica_zgadywanek[1][2] << " | " << tablica_zgadywanek[1][3] << " | " << tablica_zgadywanek[1][4] << " | " << tablica_zgadywanek[1][5] << " | " << tablica_zgadywanek[1][6] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[2][0] << " | " << tablica_zgadywanek[2][1] << " | " << tablica_zgadywanek[2][2] << " | " << tablica_zgadywanek[1][3] << " | " << tablica_zgadywanek[1][4] << " | " << tablica_zgadywanek[1][5] << " | " << tablica_zgadywanek[1][6] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[3][0] << " | " << tablica_zgadywanek[3][1] << " | " << tablica_zgadywanek[3][2] << " | " << tablica_zgadywanek[3][3] << " | " << tablica_zgadywanek[3][4] << " | " << tablica_zgadywanek[3][5] << " | " << tablica_zgadywanek[3][6] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[4][0] << " | " << tablica_zgadywanek[4][1] << " | " << tablica_zgadywanek[4][2] << " | " << tablica_zgadywanek[4][3] << " | " << tablica_zgadywanek[4][4] << " | " << tablica_zgadywanek[4][5] << " | " << tablica_zgadywanek[4][6] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[5][0] << " | " << tablica_zgadywanek[5][1] << " | " << tablica_zgadywanek[5][2] << " | " << tablica_zgadywanek[5][3] << " | " << tablica_zgadywanek[5][4] << " | " << tablica_zgadywanek[5][5] << " | " << tablica_zgadywanek[5][6] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+" << endl;
+    cout << "    | " << tablica_zgadywanek[6][1] << " | " << tablica_zgadywanek[6][2] << " | " << tablica_zgadywanek[6][3] << " | " << tablica_zgadywanek[6][4] << " | " << tablica_zgadywanek[6][5] << " |" << endl;
+    cout << "    +---+---+---+---+---+    " << endl;
     cout << "x: " << focusedX << " y: " << focusedY << endl;
 }
 
-void print8x8(int rozmiar_tablicy, char** tablica_zgadywanek, string gora, string dol, string prawa, string lewa, int focusedX, int focusedY)
+void print8x8(int rozmiar_tablicy, char** tablica_zgadywanek, int focusedX, int focusedY)
 {
-    cout<< "    +---+---+---+---+---+---+---+---+    "<< endl;
-    cout<< "    | "<<gora[0]<<" | "<<gora[1]<<" | "<<gora[2]<<" | "<<gora[3]<<" | "<<gora[4]<<" | "<<gora[5]<<" | "<<gora[6]<<" | "<<gora[7]<<" | "<<gora[8]<<endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[0][0]<<" | "<< tablica_zgadywanek[0][1]<<" | "<< tablica_zgadywanek[0][2]<<" | "<< tablica_zgadywanek[0][3]<<" | "<< tablica_zgadywanek[0][4]<<" | "<<tablica_zgadywanek[0][3]<<" | "<< tablica_zgadywanek[0][3]<<" | "<< tablica_zgadywanek[0][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[1][0]<<" | "<< tablica_zgadywanek[1][1]<<" | "<< tablica_zgadywanek[1][2]<<" | "<< tablica_zgadywanek[1][3]<<" | "<< tablica_zgadywanek[1][4]<<" | "<<tablica_zgadywanek[1][3]<<" | "<< tablica_zgadywanek[1][3]<<" | "<< tablica_zgadywanek[1][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[2][0]<<" | "<< tablica_zgadywanek[2][1]<<" | "<< tablica_zgadywanek[2][2]<<" | "<< tablica_zgadywanek[2][3]<<" | "<< tablica_zgadywanek[2][4]<<" | "<<tablica_zgadywanek[2][3]<<" | "<< tablica_zgadywanek[2][3]<<" | "<< tablica_zgadywanek[2][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[3][0]<<" | "<< tablica_zgadywanek[3][1]<<" | "<< tablica_zgadywanek[3][2]<<" | "<< tablica_zgadywanek[3][3]<<" | "<< tablica_zgadywanek[3][4]<<" | "<<tablica_zgadywanek[3][3]<<" | "<< tablica_zgadywanek[3][3]<<" | "<< tablica_zgadywanek[3][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[4][0]<<" | "<< tablica_zgadywanek[4][1]<<" | "<< tablica_zgadywanek[4][2]<<" | "<< tablica_zgadywanek[4][3]<<" | "<< tablica_zgadywanek[4][4]<<" | "<<tablica_zgadywanek[4][3]<<" | "<< tablica_zgadywanek[4][3]<<" | "<< tablica_zgadywanek[4][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[5][0]<<" | "<< tablica_zgadywanek[5][1]<<" | "<< tablica_zgadywanek[5][2]<<" | "<< tablica_zgadywanek[5][3]<<" | "<< tablica_zgadywanek[5][4]<<" | "<<tablica_zgadywanek[5][3]<<" | "<< tablica_zgadywanek[5][3]<<" | "<< tablica_zgadywanek[5][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[6][0]<<" | "<< tablica_zgadywanek[6][1]<<" | "<< tablica_zgadywanek[6][2]<<" | "<< tablica_zgadywanek[6][3]<<" | "<< tablica_zgadywanek[6][4]<<" | "<<tablica_zgadywanek[6][3]<<" | "<< tablica_zgadywanek[6][3]<<" | "<< tablica_zgadywanek[6][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[7][0]<<" | "<< tablica_zgadywanek[7][1]<<" | "<< tablica_zgadywanek[7][2]<<" | "<< tablica_zgadywanek[7][3]<<" | "<< tablica_zgadywanek[7][4]<<" | "<<tablica_zgadywanek[7][3]<<" | "<< tablica_zgadywanek[7][3]<<" | "<< tablica_zgadywanek[7][4]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "    | "<<dol[0]<<" | "<<dol[1]<<" | "<<dol[2]<<" | "<<dol[3]<<" | "<<dol[4]<<" | "<<dol[5]<<" | "<<dol[6]<<" | "<<dol[7]<<" | "<<dol[8]<<endl;
-    cout<< "    +---+---+---+---+---+---+---+---+    "<< endl;
+    cout << "    +---+---+---+---+---+---+---+---+    " << endl;
+    cout << "    | " << tablica_zgadywanek[0][1] << " | " << tablica_zgadywanek[0][2] << " | " << tablica_zgadywanek[0][3] << " | " << tablica_zgadywanek[0][4] << " | " << tablica_zgadywanek[0][5] << " | " << tablica_zgadywanek[0][6] << " | " << tablica_zgadywanek[0][7] << " | " << tablica_zgadywanek[0][8] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[1][0] << " | " << tablica_zgadywanek[1][1] << " | " << tablica_zgadywanek[1][2] << " | " << tablica_zgadywanek[1][3] << " | " << tablica_zgadywanek[1][4] << " | " << tablica_zgadywanek[1][5] << " | " << tablica_zgadywanek[1][6] << " | " << tablica_zgadywanek[1][7] << " | " << tablica_zgadywanek[1][8] << " | " << tablica_zgadywanek[1][9] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[2][0] << " | " << tablica_zgadywanek[2][1] << " | " << tablica_zgadywanek[2][2] << " | " << tablica_zgadywanek[1][3] << " | " << tablica_zgadywanek[1][4] << " | " << tablica_zgadywanek[1][5] << " | " << tablica_zgadywanek[1][6] << " | " << tablica_zgadywanek[1][7] << " | " << tablica_zgadywanek[1][8] << " | " << tablica_zgadywanek[1][9] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[3][0] << " | " << tablica_zgadywanek[3][1] << " | " << tablica_zgadywanek[3][2] << " | " << tablica_zgadywanek[3][3] << " | " << tablica_zgadywanek[3][4] << " | " << tablica_zgadywanek[3][5] << " | " << tablica_zgadywanek[3][6] << " | " << tablica_zgadywanek[3][7] << " | " << tablica_zgadywanek[3][8] << " | " << tablica_zgadywanek[3][9] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[4][0] << " | " << tablica_zgadywanek[4][1] << " | " << tablica_zgadywanek[4][2] << " | " << tablica_zgadywanek[4][3] << " | " << tablica_zgadywanek[4][4] << " | " << tablica_zgadywanek[4][5] << " | " << tablica_zgadywanek[4][6] << " | " << tablica_zgadywanek[4][7] << " | " << tablica_zgadywanek[4][8] << " | " << tablica_zgadywanek[4][9] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[5][0] << " | " << tablica_zgadywanek[5][1] << " | " << tablica_zgadywanek[5][2] << " | " << tablica_zgadywanek[5][3] << " | " << tablica_zgadywanek[5][4] << " | " << tablica_zgadywanek[5][5] << " | " << tablica_zgadywanek[5][6] << " | " << tablica_zgadywanek[5][7] << " | " << tablica_zgadywanek[5][8] << " | " << tablica_zgadywanek[5][9] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[6][0] << " | " << tablica_zgadywanek[6][1] << " | " << tablica_zgadywanek[6][2] << " | " << tablica_zgadywanek[6][3] << " | " << tablica_zgadywanek[6][4] << " | " << tablica_zgadywanek[6][5] << " | " << tablica_zgadywanek[6][6] << " | " << tablica_zgadywanek[6][7] << " | " << tablica_zgadywanek[6][8] << " | " << tablica_zgadywanek[6][9] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[7][0] << " | " << tablica_zgadywanek[7][1] << " | " << tablica_zgadywanek[7][2] << " | " << tablica_zgadywanek[7][3] << " | " << tablica_zgadywanek[7][4] << " | " << tablica_zgadywanek[7][5] << " | " << tablica_zgadywanek[7][6] << " | " << tablica_zgadywanek[7][7] << " | " << tablica_zgadywanek[7][8] << " | " << tablica_zgadywanek[7][9] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[8][0] << " | " << tablica_zgadywanek[8][1] << " | " << tablica_zgadywanek[8][2] << " | " << tablica_zgadywanek[8][3] << " | " << tablica_zgadywanek[8][4] << " | " << tablica_zgadywanek[8][5] << " | " << tablica_zgadywanek[8][6] << " | " << tablica_zgadywanek[8][7] << " | " << tablica_zgadywanek[8][8] << " | " << tablica_zgadywanek[8][9] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "    | " << tablica_zgadywanek[9][1] << " | " << tablica_zgadywanek[9][2] << " | " << tablica_zgadywanek[9][3] << " | " << tablica_zgadywanek[9][4] << " | " << tablica_zgadywanek[9][5] << " | " << tablica_zgadywanek[9][6] << " | " << tablica_zgadywanek[9][7] << " | " << tablica_zgadywanek[9][8] << " |" << endl;
+    cout << "    +---+---+---+---+---+---+---+---+    " << endl;
     cout << "x: " << focusedX << " y: " << focusedY << endl;
 }
 
-void print10x10(int rozmiar_tablicy, char** tablica_zgadywanek, string gora, string dol, string prawa, string lewa, int focusedX, int focusedY)
+void print10x10(int rozmiar_tablicy, char** tablica_zgadywanek, int focusedX, int focusedY)
 {
-    cout<< "    +---+---+---+---+---+---+---+---+---+---+   "<< endl;
-    cout<< "    | "<<gora[0]<<" | "<<gora[1]<<" | "<<gora[2]<<" | "<<gora[3]<<" | "<<gora[4]<<" | "<<gora[5]<<" | "<<gora[6]<<" | "<<gora[7]<<" | "<<gora[8]<<" | " << gora[9] << " |"<<endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[0][0]<<" | "<< tablica_zgadywanek[0][1]<<" | "<< tablica_zgadywanek[0][2]<<" | "<< tablica_zgadywanek[0][3]<<" | "<< tablica_zgadywanek[0][4]<<" | "<<tablica_zgadywanek[0][5]<<" | "<< tablica_zgadywanek[0][6]<<" | "<< tablica_zgadywanek[0][7]<<" | "<< tablica_zgadywanek[0][8]<<" | "<< tablica_zgadywanek[0][9]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[1][0]<<" | "<< tablica_zgadywanek[1][1]<<" | "<< tablica_zgadywanek[1][2]<<" | "<< tablica_zgadywanek[1][3]<<" | "<< tablica_zgadywanek[1][4]<<" | "<<tablica_zgadywanek[1][5]<<" | "<< tablica_zgadywanek[1][6]<<" | "<< tablica_zgadywanek[1][7]<<" | "<< tablica_zgadywanek[0][8]<<" | "<< tablica_zgadywanek[0][9]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[2][0]<<" | "<< tablica_zgadywanek[2][1]<<" | "<< tablica_zgadywanek[2][2]<<" | "<< tablica_zgadywanek[2][3]<<" | "<< tablica_zgadywanek[2][4]<<" | "<<tablica_zgadywanek[2][5]<<" | "<< tablica_zgadywanek[2][6]<<" | "<< tablica_zgadywanek[2][7]<<" | "<< tablica_zgadywanek[0][8]<<" | "<< tablica_zgadywanek[0][9]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[3][0]<<" | "<< tablica_zgadywanek[3][1]<<" | "<< tablica_zgadywanek[3][2]<<" | "<< tablica_zgadywanek[3][3]<<" | "<< tablica_zgadywanek[3][4]<<" | "<<tablica_zgadywanek[3][5]<<" | "<< tablica_zgadywanek[3][6]<<" | "<< tablica_zgadywanek[3][7]<<" | "<< tablica_zgadywanek[0][8]<<" | "<< tablica_zgadywanek[0][9]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[4][0]<<" | "<< tablica_zgadywanek[4][1]<<" | "<< tablica_zgadywanek[4][2]<<" | "<< tablica_zgadywanek[4][3]<<" | "<< tablica_zgadywanek[4][4]<<" | "<<tablica_zgadywanek[4][5]<<" | "<< tablica_zgadywanek[4][6]<<" | "<< tablica_zgadywanek[4][7]<<" | "<< tablica_zgadywanek[0][8]<<" | "<< tablica_zgadywanek[0][9]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[5][0]<<" | "<< tablica_zgadywanek[5][1]<<" | "<< tablica_zgadywanek[5][2]<<" | "<< tablica_zgadywanek[5][3]<<" | "<< tablica_zgadywanek[5][4]<<" | "<<tablica_zgadywanek[5][5]<<" | "<< tablica_zgadywanek[5][6]<<" | "<< tablica_zgadywanek[5][7]<<" | "<< tablica_zgadywanek[0][8]<<" | "<< tablica_zgadywanek[0][9]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[6][0]<<" | "<< tablica_zgadywanek[6][1]<<" | "<< tablica_zgadywanek[6][2]<<" | "<< tablica_zgadywanek[6][3]<<" | "<< tablica_zgadywanek[6][4]<<" | "<<tablica_zgadywanek[6][5]<<" | "<< tablica_zgadywanek[6][6]<<" | "<< tablica_zgadywanek[6][7]<<" | "<< tablica_zgadywanek[0][8]<<" | "<< tablica_zgadywanek[0][9]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[7][0]<<" | "<< tablica_zgadywanek[7][1]<<" | "<< tablica_zgadywanek[7][2]<<" | "<< tablica_zgadywanek[7][3]<<" | "<< tablica_zgadywanek[7][4]<<" | "<<tablica_zgadywanek[7][5]<<" | "<< tablica_zgadywanek[7][6]<<" | "<< tablica_zgadywanek[7][7]<<" | "<< tablica_zgadywanek[0][8]<<" | "<< tablica_zgadywanek[0][9]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[8][0]<<" | "<< tablica_zgadywanek[8][1]<<" | "<< tablica_zgadywanek[8][2]<<" | "<< tablica_zgadywanek[8][3]<<" | "<< tablica_zgadywanek[8][4]<<" | "<<tablica_zgadywanek[8][5]<<" | "<< tablica_zgadywanek[8][6]<<" | "<< tablica_zgadywanek[8][7]<<" | "<< tablica_zgadywanek[0][8]<<" | "<< tablica_zgadywanek[0][9]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "| "<<prawa[0]<<" | "<< tablica_zgadywanek[9][0]<<" | "<< tablica_zgadywanek[9][1]<<" | "<< tablica_zgadywanek[9][2]<<" | "<< tablica_zgadywanek[9][3]<<" | "<< tablica_zgadywanek[9][4]<<" | "<<tablica_zgadywanek[9][5]<<" | "<< tablica_zgadywanek[9][6]<<" | "<< tablica_zgadywanek[9][7]<<" | "<< tablica_zgadywanek[0][8]<<" | "<< tablica_zgadywanek[0][9]<<" | "<<lewa[0]<<" |"<< endl;
-    cout<< "+---+---+---+---+---+---+---+---+---+---+---+---+"<<endl;
-    cout<< "    | "<<dol[0]<<" | "<<dol[1]<<" | "<<dol[2]<<" | "<<dol[3]<<" | "<<dol[4]<<" | "<<dol[5]<<" | "<<dol[6]<<" | "<<dol[7]<<" | "<<dol[8]<<" | " << dol[9] << " |"<<endl;
-    cout<< "    +---+---+---+---+---+---+---+---+---+---+    "<< endl;
+    cout << "    +---+---+---+---+---+---+---+---+---+---+    " << endl;
+    cout << "    | " << tablica_zgadywanek[0][1] << " | " << tablica_zgadywanek[0][2] << " | " << tablica_zgadywanek[0][3] << " | " << tablica_zgadywanek[0][4] << " | " << tablica_zgadywanek[0][5] << " | " << tablica_zgadywanek[0][6] << " | " << tablica_zgadywanek[0][7] << " | " << tablica_zgadywanek[0][8] << " | " << tablica_zgadywanek[0][9] << " | " << tablica_zgadywanek[0][10] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[1][0] << " | " << tablica_zgadywanek[1][1] << " | " << tablica_zgadywanek[1][2] << " | " << tablica_zgadywanek[1][3] << " | " << tablica_zgadywanek[1][4] << " | " << tablica_zgadywanek[1][5] << " | " << tablica_zgadywanek[1][6] << " | " << tablica_zgadywanek[1][7] << " | " << tablica_zgadywanek[1][8] << " | " << tablica_zgadywanek[1][9] << " | " << tablica_zgadywanek[1][10] << " | " << tablica_zgadywanek[1][11] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[2][0] << " | " << tablica_zgadywanek[2][1] << " | " << tablica_zgadywanek[2][2] << " | " << tablica_zgadywanek[2][3] << " | " << tablica_zgadywanek[2][4] << " | " << tablica_zgadywanek[2][5] << " | " << tablica_zgadywanek[2][6] << " | " << tablica_zgadywanek[2][7] << " | " << tablica_zgadywanek[2][8] << " | " << tablica_zgadywanek[2][9] << " | " << tablica_zgadywanek[2][10] << " | " << tablica_zgadywanek[2][11] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[3][0] << " | " << tablica_zgadywanek[3][1] << " | " << tablica_zgadywanek[3][2] << " | " << tablica_zgadywanek[3][3] << " | " << tablica_zgadywanek[3][4] << " | " << tablica_zgadywanek[3][5] << " | " << tablica_zgadywanek[3][6] << " | " << tablica_zgadywanek[3][7] << " | " << tablica_zgadywanek[3][8] << " | " << tablica_zgadywanek[3][9] << " | " << tablica_zgadywanek[3][10] << " | " << tablica_zgadywanek[3][11] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[4][0] << " | " << tablica_zgadywanek[4][1] << " | " << tablica_zgadywanek[4][2] << " | " << tablica_zgadywanek[4][3] << " | " << tablica_zgadywanek[4][4] << " | " << tablica_zgadywanek[4][5] << " | " << tablica_zgadywanek[4][6] << " | " << tablica_zgadywanek[4][7] << " | " << tablica_zgadywanek[4][8] << " | " << tablica_zgadywanek[4][9] << " | " << tablica_zgadywanek[4][10] << " | " << tablica_zgadywanek[1][11] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[5][0] << " | " << tablica_zgadywanek[5][1] << " | " << tablica_zgadywanek[5][2] << " | " << tablica_zgadywanek[5][3] << " | " << tablica_zgadywanek[5][4] << " | " << tablica_zgadywanek[5][5] << " | " << tablica_zgadywanek[5][6] << " | " << tablica_zgadywanek[5][7] << " | " << tablica_zgadywanek[5][8] << " | " << tablica_zgadywanek[5][9] << " | " << tablica_zgadywanek[5][10] << " | " << tablica_zgadywanek[5][11] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[6][0] << " | " << tablica_zgadywanek[6][1] << " | " << tablica_zgadywanek[6][2] << " | " << tablica_zgadywanek[6][3] << " | " << tablica_zgadywanek[6][4] << " | " << tablica_zgadywanek[6][5] << " | " << tablica_zgadywanek[6][6] << " | " << tablica_zgadywanek[6][7] << " | " << tablica_zgadywanek[6][8] << " | " << tablica_zgadywanek[6][9] << " | " << tablica_zgadywanek[6][10] << " | " << tablica_zgadywanek[6][11] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[7][0] << " | " << tablica_zgadywanek[7][1] << " | " << tablica_zgadywanek[7][2] << " | " << tablica_zgadywanek[7][3] << " | " << tablica_zgadywanek[7][4] << " | " << tablica_zgadywanek[7][5] << " | " << tablica_zgadywanek[7][6] << " | " << tablica_zgadywanek[7][7] << " | " << tablica_zgadywanek[7][8] << " | " << tablica_zgadywanek[7][9] << " | " << tablica_zgadywanek[7][10] << " | " << tablica_zgadywanek[7][11] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[8][0] << " | " << tablica_zgadywanek[8][1] << " | " << tablica_zgadywanek[8][2] << " | " << tablica_zgadywanek[8][3] << " | " << tablica_zgadywanek[8][4] << " | " << tablica_zgadywanek[8][5] << " | " << tablica_zgadywanek[8][6] << " | " << tablica_zgadywanek[8][7] << " | " << tablica_zgadywanek[8][8] << " | " << tablica_zgadywanek[8][9] << " | " << tablica_zgadywanek[8][10] << " | " << tablica_zgadywanek[8][11] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[9][0] << " | " << tablica_zgadywanek[9][9] << " | " << tablica_zgadywanek[9][2] << " | " << tablica_zgadywanek[9][3] << " | " << tablica_zgadywanek[9][4] << " | " << tablica_zgadywanek[9][5] << " | " << tablica_zgadywanek[9][6] << " | " << tablica_zgadywanek[9][7] << " | " << tablica_zgadywanek[9][8] << " | " << tablica_zgadywanek[9][9] << " | " << tablica_zgadywanek[9][10] << " | " << tablica_zgadywanek[9][11] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "| " << tablica_zgadywanek[10][0] << " | " << tablica_zgadywanek[10][1] << " | " << tablica_zgadywanek[10][2] << " | " << tablica_zgadywanek[10][3] << " | " << tablica_zgadywanek[10][4] << " | " << tablica_zgadywanek[10][5] << " | " << tablica_zgadywanek[10][6] << " | " << tablica_zgadywanek[10][7] << " | " << tablica_zgadywanek[10][8] << " | " << tablica_zgadywanek[10][9] << " | " << tablica_zgadywanek[10][10] << " | " << tablica_zgadywanek[10][11] << " |" << endl;
+    cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
+    cout << "    | " << tablica_zgadywanek[11][1] << " | " << tablica_zgadywanek[11][2] << " | " << tablica_zgadywanek[11][3] << " | " << tablica_zgadywanek[11][4] << " | " << tablica_zgadywanek[11][5] << " | " << tablica_zgadywanek[11][6] << " | " << tablica_zgadywanek[11][7] << " | " << tablica_zgadywanek[11][8] << " | " << tablica_zgadywanek[11][9] << " | " << tablica_zgadywanek[11][10] << " |" << endl;
+    cout << "    +---+---+---+---+---+---+---+---+---+---+    " << endl;
     cout << "x: " << focusedX << " y: " << focusedY << endl;
 }
 
@@ -144,7 +157,7 @@ int menu()
 
 bool validation(char c)
 {
-    string keys = "wWaAsSdDqQuUrRokpH ";
+    string keys = "wWaAsSdDqQuUrRokpH mM";
 
     if (keys.find(c) != -1)
     {
@@ -154,18 +167,101 @@ bool validation(char c)
     return false;
 }
 
+bool out(int x, int y, int rozmiar_tablicy)
+{
+    if (x > 0 && x < rozmiar_tablicy - 1 && y > 0 && y < rozmiar_tablicy - 1)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void ustawDxy(int rozmiar_tablicy, int x, int y, int& dX, int& dY) {
+
+    if (x == 0)
+    {
+        dX = 0, dY = 1;
+    } else if(x == rozmiar_tablicy - 1)
+    {
+        dX = 0, dY = -1;
+    } else if(y == 0)
+    {
+        dY = 0, dX = 1;
+    } else if(y == rozmiar_tablicy - 1)
+    {
+        dY = 0, dX = -1;
+    }
+}
+
+void strzal(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_tablicy, int startX, int startY, int& szufladka)
+{
+    int x = startX, y = startY;
+    int dX, dY;
+    ustawDxy(rozmiar_tablicy, x, y, dX, dY);
+
+    do
+    {
+        if (dX == 0)
+        {
+            if (x != 0 && tablica_odpowiedzi[y + dY][x - 1] == 'o')
+            {
+                dX = dY;
+                dY = 0;
+            }
+            else if (tablica_odpowiedzi[y + dY][x] == 'o')
+            {
+                tablica_zgadywanek[startY][startX] = 'H';
+                return;
+            }
+            else if (x != rozmiar_tablicy - 1 && tablica_odpowiedzi[y + dY][x + 1] == 'o')
+            {
+                dX = -dY;
+                dY = 0;
+            }
+            else {
+                x += dX;
+                y += dY;
+            }
+        } else
+        {
+            if (y != 0 && tablica_odpowiedzi[y - 1][x + dX] == 'o')
+            {
+                dX = 0;
+                dY = dX;
+            }
+            else if (tablica_odpowiedzi[y][x + dX] == 'o')
+            {
+                tablica_zgadywanek[startY][startX] = 'H';
+                return;
+            }
+            else if (y != rozmiar_tablicy - 1 && tablica_odpowiedzi[y + 1][x + dX] == 'o')
+            {
+                dX = 0;
+                dY = -dX;
+            }
+            else {
+                x += dX;
+                y += dY;
+            }
+        }
+    } while (out(x, y, rozmiar_tablicy));
+
+    if (x == startX && y == startY)
+    {
+        tablica_zgadywanek[startY][startX] = 'R';
+        return;
+    }
+
+    tablica_zgadywanek[startY][startX] = szufladka;
+    tablica_zgadywanek[y][x] = szufladka;
+    szufladka++;
+}
+
 void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_tablicy)
 {
-    string gora, dol, prawa, lewa;
     int focusedX = 0, focusedY = 0;
-
-    for (int i = 0; i < rozmiar_tablicy; ++i)
-    {
-        gora += ' ';
-        dol += ' ';
-        prawa += ' ';
-        lewa += ' ';
-    }
+    int szufladka = '0';
 
     vector<pair<int, int>> undo;
     vector<pair<int, int>> redo;
@@ -175,19 +271,19 @@ void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_
         system("cls");
         switch (rozmiar_tablicy)
         {
-            case 5:
+            case 7:
             {
-                print5x5(rozmiar_tablicy, tablica_zgadywanek, gora, dol, prawa, lewa, focusedX, focusedY);
-                break;
-            }
-            case 8:
-            {
-                print8x8(rozmiar_tablicy, tablica_zgadywanek, gora, dol, prawa, lewa, focusedX, focusedY);
+                print5x5(rozmiar_tablicy, tablica_zgadywanek, focusedX, focusedY);
                 break;
             }
             case 10:
             {
-                print10x10(rozmiar_tablicy, tablica_zgadywanek, gora, dol, prawa, lewa, focusedX, focusedY);
+                print8x8(rozmiar_tablicy, tablica_zgadywanek, focusedX, focusedY);
+                break;
+            }
+            case 12:
+            {
+                print10x10(rozmiar_tablicy, tablica_zgadywanek, focusedX, focusedY);
                 break;
             }
         }
@@ -199,22 +295,34 @@ void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_
             {
                 case 'W':
                 {
-                    focusedY--;
+                    if (focusedY > 0)
+                    {
+                        focusedY--;
+                    }
                     break;
                 }
                 case 'S':
                 {
-                    focusedY++;
+                    if (focusedY < rozmiar_tablicy)
+                    {
+                        focusedY++;
+                    }
                     break;
                 }
                 case 'A':
                 {
-                    focusedX--;
+                    if (focusedX > 0)
+                    {
+                        focusedX--;
+                    }
                     break;
                 }
                 case 'D':
                 {
-                    focusedX++;
+                    if (focusedX < rozmiar_tablicy)
+                    {
+                        focusedX++;
+                    }
                     break;
                 }
                 case 'Q':
@@ -253,9 +361,9 @@ void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_
                 case 'K':
                 {
                     int sumaWygranych = 0;
-                    for (int i = 0; i < rozmiar_tablicy; ++i)
+                    for (int i = 1; i < rozmiar_tablicy - 1; ++i)
                     {
-                        for (int j = 0; j < rozmiar_tablicy; ++j)
+                        for (int j = 1; j < rozmiar_tablicy - 1; ++j)
                         {
                             if (tablica_zgadywanek[i][j] == 'o' && tablica_odpowiedzi[i][j] == 'o')
                             {
@@ -275,19 +383,19 @@ void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_
                     system("cls");
                     switch (rozmiar_tablicy)
                     {
-                        case 5:
+                        case 7:
                         {
-                            print5x5(rozmiar_tablicy, tablica_odpowiedzi, gora, dol, prawa, lewa, -1, -1);
-                            break;
-                        }
-                        case 8:
-                        {
-                            print8x8(rozmiar_tablicy, tablica_odpowiedzi, gora, dol, prawa, lewa, -1, -1);
+                            print5x5(rozmiar_tablicy, tablica_odpowiedzi, -1, -1);
                             break;
                         }
                         case 10:
                         {
-                            print10x10(rozmiar_tablicy, tablica_odpowiedzi, gora, dol, prawa, lewa, -1, -1);
+                            print8x8(rozmiar_tablicy, tablica_odpowiedzi, -1, -1);
+                            break;
+                        }
+                        case 12:
+                        {
+                            print10x10(rozmiar_tablicy, tablica_odpowiedzi, -1, -1);
                             break;
                         }
                     }
@@ -301,31 +409,34 @@ void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_
                     system("cls");
                     switch(rozmiar_tablicy)
                     {
-                        case 5:
+                        case 7:
                         {
-                            print5x5(rozmiar_tablicy, tablica_odpowiedzi, gora, dol, prawa, lewa, focusedX, focusedY);
-                            break;
-                        }
-                        case 8:
-                        {
-                            print8x8(rozmiar_tablicy, tablica_odpowiedzi, gora, dol, prawa, lewa, focusedX, focusedY);
+                            print5x5(rozmiar_tablicy, tablica_odpowiedzi, focusedX, focusedY);
                             break;
                         }
                         case 10:
                         {
-                            print10x10(rozmiar_tablicy, tablica_odpowiedzi, gora, dol, prawa, lewa, focusedX, focusedY);
+                            print8x8(rozmiar_tablicy, tablica_odpowiedzi, focusedX, focusedY);
+                            break;
+                        }
+                        case 12:
+                        {
+                            print10x10(rozmiar_tablicy, tablica_odpowiedzi, focusedX, focusedY);
                             break;
                         }
                     }
 
-                    Sleep(1000);
+                    Sleep(5000);
 
                     break;
                 }
-                case ' ':
+                case 'M':
                 {
                     // do zrobienia
-                    // strzal jak jest zfocusowana linia
+                    if (focusedX == 0 || focusedY == 0 || focusedX == rozmiar_tablicy - 1 || focusedY == rozmiar_tablicy - 1)
+                    {
+                        strzal(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy, focusedX, focusedY, szufladka);
+                    }
                     break;
                 }
             }
@@ -348,28 +459,28 @@ int main()
         {
             case 1:
             {
-                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(5);
-                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(5);
-                losuj(5, tablica_odpowiedzi, 3);
-                rozmiar_tablicy = 5;
+                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(7);
+                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(7);
+                wypelnij_tablice(7, tablica_odpowiedzi, 3);
+                rozmiar_tablicy = 7;
                 gameLoop(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy);
                 break;
             }
             case 2:
             {
-                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(8);
-                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(8);
-                losuj(8, tablica_odpowiedzi, 6);
-                rozmiar_tablicy = 8;
+                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(10);
+                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(10);
+                wypelnij_tablice(10, tablica_odpowiedzi, 6);
+                rozmiar_tablicy = 10;
                 gameLoop(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy);
                 break;
             }
             case 3:
             {
-                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(10);
-                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(10);
-                losuj(10, tablica_odpowiedzi, 8);
-                rozmiar_tablicy = 10;
+                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(12);
+                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(12);
+                wypelnij_tablice(12, tablica_odpowiedzi, 8);
+                rozmiar_tablicy = 12;
                 gameLoop(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy);
                 break;
             }
@@ -377,12 +488,10 @@ int main()
             {
                 // ustawienia
                 continue;
-                //break;
             }
             case 5:
             {
                 exit(0);
-                break;
             }
         }
 
