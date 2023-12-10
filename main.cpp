@@ -169,93 +169,93 @@ bool validation(char c)
 
 bool out(int x, int y, int rozmiar_tablicy)
 {
-    if (x > 0 && x < rozmiar_tablicy - 1 && y > 0 && y < rozmiar_tablicy - 1)
-    {
-        return true;
-    }
-
-    return false;
+    return (x > 0 && x < rozmiar_tablicy && y > 0 && y < rozmiar_tablicy);
 }
 
-void ustawDxy(int rozmiar_tablicy, int x, int y, int& dX, int& dY) {
-
-    if (x == 0)
-    {
-        dX = 1, dY = 0;
-    } else if (x == rozmiar_tablicy - 1)
-    {
-        dX = -1, dY = 0;
-    } else if(y == 0)
-    {
-        dY = 1, dX = 0;
-    } else if(y == rozmiar_tablicy - 1)
-    {
-        dY = -1, dX = 0;
+void strzal(char** tablica_odpowiedzi, char** tablica_zgadywanek, int x, int y, int rozmiar_tablicy, int szufladka) {
+    int kierunek; //=1 prawo // =2 lewo // =3 do gory // =4 do dolu
+    int start_x = x;
+    int start_y = y;
+    if (y == 0) {
+        kierunek = 4;
     }
-}
-
-void strzal(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_tablicy, int startX, int startY, int& szufladka)
-{
-    int x = startX, y = startY;
-    int dX, dY;
-    ustawDxy(rozmiar_tablicy, x, y, dX, dY);
-
-    do
-    {
-        if (dX == 0)
-        {
-            if (x != 0 && tablica_odpowiedzi[y + dY][x - 1] == 'o')
-            {
-                dX = dY;
-                dY = 0;
+    if (x == 0) {
+        kierunek = 1;
+    }
+    if (y == rozmiar_tablicy) {
+        kierunek = 3;
+    }
+    if (x == rozmiar_tablicy) {
+        kierunek = 2;
+    }
+    while (out(x, y, rozmiar_tablicy)) {
+        switch (kierunek) {
+            case 1: {
+                x++;
+                if (tablica_odpowiedzi[y - 1][x] == 'o') {
+                    kierunek = 4;
+                }
+                if (tablica_odpowiedzi[y][x] == 'o') {
+                    tablica_zgadywanek[start_y][start_x] = 'H';
+                    return;
+                }
+                if (tablica_odpowiedzi[y + 1][x] == 'o') {
+                    kierunek = 3;
+                }
+                break;
             }
-            else if (tablica_odpowiedzi[y + dY][x] == 'o')
-            {
-                tablica_zgadywanek[startY][startX] = 'H';
-                return;
+            case 2: {
+                x--;
+                if (tablica_odpowiedzi[y - 1][x] == 'o') {
+                    kierunek = 3;
+                }
+                if (tablica_odpowiedzi[y][x] == 'o') {
+                    tablica_zgadywanek[start_y][start_x] = 'H';
+                    return;
+                }
+                if (tablica_odpowiedzi[y + 1][x] == 'o') {
+                    kierunek = 4;
+                }
+                break;
             }
-            else if (x != rozmiar_tablicy - 1 && tablica_odpowiedzi[y + dY][x + 1] == 'o')
-            {
-                dX = -dY;
-                dY = 0;
+            case 3: {
+                y--;
+                if (tablica_odpowiedzi[y][x - 1] == 'o') {
+                    kierunek = 2;
+                }
+                if (tablica_odpowiedzi[y][x] == 'o') {
+                    tablica_zgadywanek[start_y][start_x] = 'H';
+                    return;
+                }
+                if (tablica_odpowiedzi[y][x + 1] == 'o') {
+                    kierunek = 1;
+                }
+                break;
             }
-            else {
-                x += dX;
-                y += dY;
-            }
-        } else
-        {
-            if (y != 0 && tablica_odpowiedzi[y - 1][x + dX] == 'o')
-            {
-                dY = dX;
-                dX = 0;
-            }
-            else if (tablica_odpowiedzi[y][x + dX] == 'o')
-            {
-                tablica_zgadywanek[startY][startX] = 'H';
-                return;
-            }
-            else if (y != rozmiar_tablicy - 1 && tablica_odpowiedzi[y + 1][x + dX] == 'o')
-            {
-                dY = -dX;
-                dX = 0;
-            }
-            else {
-                x += dX;
-                y += dY;
+            case 4: {
+                y++;
+                if (tablica_odpowiedzi[y][x - 1] == 'o') {
+                    kierunek = 1;
+                }
+                if (tablica_odpowiedzi[y][x] == 'o') {
+                    tablica_zgadywanek[start_y][start_x] = 'H';
+                    return;
+                }
+                if (tablica_odpowiedzi[y][x + 1] == 'o') {
+                    kierunek = 2;
+                }
+                break;
             }
         }
-    } while (out(x, y, rozmiar_tablicy));
-
-    if (x == startX && y == startY)
-    {
-        tablica_zgadywanek[startY][startX] = 'R';
+    }
+    if (start_x == x && start_y == y) {
+        tablica_zgadywanek[start_y][start_x] = 'R';
         return;
     }
-
-    tablica_zgadywanek[startY][startX] = szufladka;
     tablica_zgadywanek[y][x] = szufladka;
+    tablica_zgadywanek[start_y][start_x] = szufladka;
     szufladka++;
+
 }
 
 void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_tablicy)
