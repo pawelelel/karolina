@@ -181,16 +181,16 @@ void ustawDxy(int rozmiar_tablicy, int x, int y, int& dX, int& dY) {
 
     if (x == 0)
     {
-        dX = 0, dY = 1;
-    } else if(x == rozmiar_tablicy - 1)
+        dX = 1, dY = 0;
+    } else if (x == rozmiar_tablicy - 1)
     {
-        dX = 0, dY = -1;
+        dX = -1, dY = 0;
     } else if(y == 0)
     {
-        dY = 0, dX = 1;
+        dY = 1, dX = 0;
     } else if(y == rozmiar_tablicy - 1)
     {
-        dY = 0, dX = -1;
+        dY = -1, dX = 0;
     }
 }
 
@@ -227,8 +227,8 @@ void strzal(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_ta
         {
             if (y != 0 && tablica_odpowiedzi[y - 1][x + dX] == 'o')
             {
-                dX = 0;
                 dY = dX;
+                dX = 0;
             }
             else if (tablica_odpowiedzi[y][x + dX] == 'o')
             {
@@ -237,8 +237,8 @@ void strzal(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_ta
             }
             else if (y != rozmiar_tablicy - 1 && tablica_odpowiedzi[y + 1][x + dX] == 'o')
             {
-                dX = 0;
                 dY = -dX;
+                dX = 0;
             }
             else {
                 x += dX;
@@ -444,8 +444,22 @@ void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_
     }
 }
 
+struct s{
+
+};
+
+struct s1{
+    s tab[5];
+};
+
+
 int main()
 {
+    s1 aaa = {
+            {s{}, s{}, s{}}
+    };
+    int tablica[5];
+
     while (true)
     {
         system("cls");
