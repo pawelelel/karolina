@@ -1,10 +1,61 @@
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
-#include <vector>
-#include<windows.h>
+#include <windows.h>
 
 using namespace std;
+
+struct Wspolrzedne {
+    int x, y;
+};
+
+struct ListaWspolrzednych {
+    Wspolrzedne* lista;
+    int rozmiar;
+    int ilosc_elementow;
+};
+
+ListaWspolrzednych utworzListeWspolrzednych(int rozmiar) {
+    ListaWspolrzednych lista;
+
+    lista.lista = new Wspolrzedne[rozmiar];
+    lista.rozmiar = rozmiar;
+    lista.ilosc_elementow = 0;
+    return lista;
+}
+
+void dodajElementListaWspolrzednych(ListaWspolrzednych& wspolrzedne, Wspolrzedne element) {
+
+    if (wspolrzedne.ilosc_elementow == wspolrzedne.rozmiar) {
+        for (int i = 1; i < wspolrzedne.rozmiar - 1; i++){
+            wspolrzedne.lista[i-1] = wspolrzedne.lista[i];
+        }
+
+        wspolrzedne.lista[wspolrzedne.rozmiar - 1] = element;
+    }
+    else {
+        wspolrzedne.lista[wspolrzedne.ilosc_elementow] = element;
+        wspolrzedne.ilosc_elementow++;
+    }
+}
+
+void usunElementListaWspolrzednych(ListaWspolrzednych& wspolrzedne, int ktory) {
+
+    if (ktory < wspolrzedne.ilosc_elementow) {
+        for (int i = ktory; i < wspolrzedne.rozmiar - 1; i++){
+            wspolrzedne.lista[i] = wspolrzedne.lista[i+1];
+        }
+
+        wspolrzedne.ilosc_elementow--;
+    }
+}
+
+void usunOstatniElementListaWspolrzednych(ListaWspolrzednych& wspolrzedne) {
+
+    if (wspolrzedne.ilosc_elementow > 0) {
+        wspolrzedne.ilosc_elementow--;
+    }
+}
 
 char** tworzenie_tablicy_dwu_wymiarowej(int rozmiar_tablicy)
 {
@@ -23,53 +74,56 @@ char** tworzenie_tablicy_dwu_wymiarowej(int rozmiar_tablicy)
 
 char** losuj(int rozmiar_tablicy, char** tablica, int ile)
 {
-    vector<pair<int, int>>wszystkie_mozliwe_pary;
+    ListaWspolrzednych wszystkie_mozliwe_pary = utworzListeWspolrzednych((rozmiar_tablicy-2) * (rozmiar_tablicy - 2));
     for(int i=1;i<rozmiar_tablicy - 1; i++)
     {
         for(int j=1; j< rozmiar_tablicy - 1; j++)
         {
-            pair<int,int>para;
-            para.first=i;
-            para.second=j;
-            wszystkie_mozliwe_pary.push_back(para);
+            Wspolrzedne para;
+            para.x=i;
+            para.y=j;
+            dodajElementListaWspolrzednych(wszystkie_mozliwe_pary, para);
         }
 
     }
-    // wylosowany indeks- losowanie par
 
     srand(time(NULL));
     for(int i = 0; i<ile; i++)
     {
-        int losownie_par=rand() % wszystkie_mozliwe_pary.size();
-        pair<int,int> c = wszystkie_mozliwe_pary[losownie_par];
-        tablica[c.first][c.second] = 'o';
-        wszystkie_mozliwe_pary.erase(wszystkie_mozliwe_pary.begin()+losownie_par);
+        int losowanie_par=rand() % wszystkie_mozliwe_pary.ilosc_elementow;
+        Wspolrzedne c = wszystkie_mozliwe_pary.lista[losowanie_par];
+        tablica[c.y][c.x] = 'o';
+        usunElementListaWspolrzednych(wszystkie_mozliwe_pary, losowanie_par);
     }
 
     return tablica;
 }
 
-char** stala_tablica(int rozmiar_tablicy, char** tablica, int ile)
+void menuGry()
 {
-    tablica[1][2] = 'o';
-    tablica[2][2] = 'o';
-    return tablica;
+    cout << endl;
+    cout << "w => ruch do góry" << endl;
+    cout << "s => ruch w dol" << endl;
+    cout << "a => ruch w lewo" << endl;
+    cout << "d => ruch w prawo" << endl;
+    cout << "o => zaznacz atom" << endl;
+    cout << "u => undo" << endl;
+    cout << "r => redo" << endl;
+    cout << "m => strzal" << endl;
+    cout << "k => pokaz punkty i koniec gry" << endl;
+    cout << "p => pokaz plansze i koniec gry" << endl;
+    cout << "h => pokaz na chwile plansze" << endl;
+    cout << "q => koniec gry, menu glowne" << endl;
 }
 
-char** wypelnij_tablice(int rozmiar_tablicy, char** tablica, int ile)
-{
-    // return losuj(rozmiar_tablicy, tablica, ile);
-    return stala_tablica(rozmiar_tablicy, tablica, ile);
-}
-
-void print5x5(int rozmiar_tablicy, char** tablica_zgadywanek, int focusedX, int focusedY)
+void print5x5(int rozmiar_tablicy, char** tablica_zgadywanek)
 {
     cout << "    +---+---+---+---+---+    " << endl;
     cout << "    | " << tablica_zgadywanek[0][1] << " | " << tablica_zgadywanek[0][2] << " | " << tablica_zgadywanek[0][3] << " | " << tablica_zgadywanek[0][4] << " | " << tablica_zgadywanek[0][5] << " |" << endl;
     cout << "+---+---+---+---+---+---+---+" << endl;
     cout << "| " << tablica_zgadywanek[1][0] << " | " << tablica_zgadywanek[1][1] << " | " << tablica_zgadywanek[1][2] << " | " << tablica_zgadywanek[1][3] << " | " << tablica_zgadywanek[1][4] << " | " << tablica_zgadywanek[1][5] << " | " << tablica_zgadywanek[1][6] << " |" << endl;
     cout << "+---+---+---+---+---+---+---+" << endl;
-    cout << "| " << tablica_zgadywanek[2][0] << " | " << tablica_zgadywanek[2][1] << " | " << tablica_zgadywanek[2][2] << " | " << tablica_zgadywanek[1][3] << " | " << tablica_zgadywanek[1][4] << " | " << tablica_zgadywanek[1][5] << " | " << tablica_zgadywanek[1][6] << " |" << endl;
+    cout << "| " << tablica_zgadywanek[2][0] << " | " << tablica_zgadywanek[2][1] << " | " << tablica_zgadywanek[2][2] << " | " << tablica_zgadywanek[2][3] << " | " << tablica_zgadywanek[2][4] << " | " << tablica_zgadywanek[2][5] << " | " << tablica_zgadywanek[2][6] << " |" << endl;
     cout << "+---+---+---+---+---+---+---+" << endl;
     cout << "| " << tablica_zgadywanek[3][0] << " | " << tablica_zgadywanek[3][1] << " | " << tablica_zgadywanek[3][2] << " | " << tablica_zgadywanek[3][3] << " | " << tablica_zgadywanek[3][4] << " | " << tablica_zgadywanek[3][5] << " | " << tablica_zgadywanek[3][6] << " |" << endl;
     cout << "+---+---+---+---+---+---+---+" << endl;
@@ -79,17 +133,16 @@ void print5x5(int rozmiar_tablicy, char** tablica_zgadywanek, int focusedX, int 
     cout << "+---+---+---+---+---+---+---+" << endl;
     cout << "    | " << tablica_zgadywanek[6][1] << " | " << tablica_zgadywanek[6][2] << " | " << tablica_zgadywanek[6][3] << " | " << tablica_zgadywanek[6][4] << " | " << tablica_zgadywanek[6][5] << " |" << endl;
     cout << "    +---+---+---+---+---+    " << endl;
-    cout << "x: " << focusedX << " y: " << focusedY << endl;
 }
 
-void print8x8(int rozmiar_tablicy, char** tablica_zgadywanek, int focusedX, int focusedY)
+void print8x8(int rozmiar_tablicy, char** tablica_zgadywanek)
 {
     cout << "    +---+---+---+---+---+---+---+---+    " << endl;
     cout << "    | " << tablica_zgadywanek[0][1] << " | " << tablica_zgadywanek[0][2] << " | " << tablica_zgadywanek[0][3] << " | " << tablica_zgadywanek[0][4] << " | " << tablica_zgadywanek[0][5] << " | " << tablica_zgadywanek[0][6] << " | " << tablica_zgadywanek[0][7] << " | " << tablica_zgadywanek[0][8] << " |" << endl;
     cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
     cout << "| " << tablica_zgadywanek[1][0] << " | " << tablica_zgadywanek[1][1] << " | " << tablica_zgadywanek[1][2] << " | " << tablica_zgadywanek[1][3] << " | " << tablica_zgadywanek[1][4] << " | " << tablica_zgadywanek[1][5] << " | " << tablica_zgadywanek[1][6] << " | " << tablica_zgadywanek[1][7] << " | " << tablica_zgadywanek[1][8] << " | " << tablica_zgadywanek[1][9] << " |" << endl;
     cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
-    cout << "| " << tablica_zgadywanek[2][0] << " | " << tablica_zgadywanek[2][1] << " | " << tablica_zgadywanek[2][2] << " | " << tablica_zgadywanek[1][3] << " | " << tablica_zgadywanek[1][4] << " | " << tablica_zgadywanek[1][5] << " | " << tablica_zgadywanek[1][6] << " | " << tablica_zgadywanek[1][7] << " | " << tablica_zgadywanek[1][8] << " | " << tablica_zgadywanek[1][9] << " |" << endl;
+    cout << "| " << tablica_zgadywanek[2][0] << " | " << tablica_zgadywanek[2][1] << " | " << tablica_zgadywanek[2][2] << " | " << tablica_zgadywanek[2][3] << " | " << tablica_zgadywanek[2][4] << " | " << tablica_zgadywanek[2][5] << " | " << tablica_zgadywanek[2][6] << " | " << tablica_zgadywanek[2][7] << " | " << tablica_zgadywanek[2][8] << " | " << tablica_zgadywanek[2][9] << " |" << endl;
     cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
     cout << "| " << tablica_zgadywanek[3][0] << " | " << tablica_zgadywanek[3][1] << " | " << tablica_zgadywanek[3][2] << " | " << tablica_zgadywanek[3][3] << " | " << tablica_zgadywanek[3][4] << " | " << tablica_zgadywanek[3][5] << " | " << tablica_zgadywanek[3][6] << " | " << tablica_zgadywanek[3][7] << " | " << tablica_zgadywanek[3][8] << " | " << tablica_zgadywanek[3][9] << " |" << endl;
     cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
@@ -105,10 +158,9 @@ void print8x8(int rozmiar_tablicy, char** tablica_zgadywanek, int focusedX, int 
     cout << "+---+---+---+---+---+---+---+---+---+---+" << endl;
     cout << "    | " << tablica_zgadywanek[9][1] << " | " << tablica_zgadywanek[9][2] << " | " << tablica_zgadywanek[9][3] << " | " << tablica_zgadywanek[9][4] << " | " << tablica_zgadywanek[9][5] << " | " << tablica_zgadywanek[9][6] << " | " << tablica_zgadywanek[9][7] << " | " << tablica_zgadywanek[9][8] << " |" << endl;
     cout << "    +---+---+---+---+---+---+---+---+    " << endl;
-    cout << "x: " << focusedX << " y: " << focusedY << endl;
 }
 
-void print10x10(int rozmiar_tablicy, char** tablica_zgadywanek, int focusedX, int focusedY)
+void print10x10(int rozmiar_tablicy, char** tablica_zgadywanek)
 {
     cout << "    +---+---+---+---+---+---+---+---+---+---+    " << endl;
     cout << "    | " << tablica_zgadywanek[0][1] << " | " << tablica_zgadywanek[0][2] << " | " << tablica_zgadywanek[0][3] << " | " << tablica_zgadywanek[0][4] << " | " << tablica_zgadywanek[0][5] << " | " << tablica_zgadywanek[0][6] << " | " << tablica_zgadywanek[0][7] << " | " << tablica_zgadywanek[0][8] << " | " << tablica_zgadywanek[0][9] << " | " << tablica_zgadywanek[0][10] << " |" << endl;
@@ -135,119 +187,89 @@ void print10x10(int rozmiar_tablicy, char** tablica_zgadywanek, int focusedX, in
     cout << "+---+---+---+---+---+---+---+---+---+---+---+---+" << endl;
     cout << "    | " << tablica_zgadywanek[11][1] << " | " << tablica_zgadywanek[11][2] << " | " << tablica_zgadywanek[11][3] << " | " << tablica_zgadywanek[11][4] << " | " << tablica_zgadywanek[11][5] << " | " << tablica_zgadywanek[11][6] << " | " << tablica_zgadywanek[11][7] << " | " << tablica_zgadywanek[11][8] << " | " << tablica_zgadywanek[11][9] << " | " << tablica_zgadywanek[11][10] << " |" << endl;
     cout << "    +---+---+---+---+---+---+---+---+---+---+    " << endl;
-    cout << "x: " << focusedX << " y: " << focusedY << endl;
 }
 
-int menu()
+
+bool w_polu(int x, int y, int rozmiar_tablicy)
 {
-    system("cls");
-
-    cout << "Wybierz stopien trudnosci: " << endl;
-    cout << "uzyj w i s" << endl;
-    cout << "1=> 5x5 " << endl;
-    cout << "2=> 8x8 " << endl;
-    cout << "3=> 10x10 " << endl;
-    cout << "4=> ustawienia klawiszy" << endl;
-    cout << "5=> wyjscie" << endl;
-
-    int rezultat_wybrania_z_menu;
-    cin >> rezultat_wybrania_z_menu;
-    return rezultat_wybrania_z_menu;
+    return (x > 0 && x < rozmiar_tablicy-1 && y > 0 && y < rozmiar_tablicy-1);
 }
 
-bool validation(char c)
-{
-    string keys = "wWaAsSdDqQuUrRokpH mM";
+void strzal(char** tablica_odpowiedzi, char** tablica_zgadywanek, char kierunek, int x, int y, int rozmiar_tablicy, int& szufladka) {
 
-    if (keys.find(c) != -1)
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool out(int x, int y, int rozmiar_tablicy)
-{
-    return (x > 0 && x < rozmiar_tablicy && y > 0 && y < rozmiar_tablicy);
-}
-
-void strzal(char** tablica_odpowiedzi, char** tablica_zgadywanek, int x, int y, int rozmiar_tablicy, int szufladka) {
-    int kierunek; //=1 prawo // =2 lewo // =3 do gory // =4 do dolu
     int start_x = x;
     int start_y = y;
-    if (y == 0) {
-        kierunek = 4;
-    }
-    if (x == 0) {
-        kierunek = 1;
-    }
-    if (y == rozmiar_tablicy) {
-        kierunek = 3;
-    }
-    if (x == rozmiar_tablicy) {
-        kierunek = 2;
-    }
-    while (out(x, y, rozmiar_tablicy)) {
+
+    do {
         switch (kierunek) {
-            case 1: {
-                x++;
-                if (tablica_odpowiedzi[y - 1][x] == 'o') {
-                    kierunek = 4;
+            case 'P': {
+                if (tablica_odpowiedzi[y - 1][x+1] == 'o') {
+                    kierunek = 'D';
                 }
-                if (tablica_odpowiedzi[y][x] == 'o') {
+                else if (tablica_odpowiedzi[y][x+1] == 'o') {
                     tablica_zgadywanek[start_y][start_x] = 'H';
                     return;
                 }
-                if (tablica_odpowiedzi[y + 1][x] == 'o') {
-                    kierunek = 3;
+                else if (tablica_odpowiedzi[y + 1][x+1] == 'o') {
+                    kierunek = 'G';
+                }
+                else {
+                    x++;
                 }
                 break;
             }
-            case 2: {
-                x--;
-                if (tablica_odpowiedzi[y - 1][x] == 'o') {
-                    kierunek = 3;
+            case 'L': {
+                if (tablica_odpowiedzi[y - 1][x-1] == 'o') {
+                    kierunek = 'G';
                 }
-                if (tablica_odpowiedzi[y][x] == 'o') {
+                else if (tablica_odpowiedzi[y][x-1] == 'o') {
                     tablica_zgadywanek[start_y][start_x] = 'H';
                     return;
                 }
-                if (tablica_odpowiedzi[y + 1][x] == 'o') {
-                    kierunek = 4;
+                else if (tablica_odpowiedzi[y + 1][x-1] == 'o') {
+                    kierunek = 'D';
+                }
+                else {
+                    x--;
                 }
                 break;
             }
-            case 3: {
-                y--;
-                if (tablica_odpowiedzi[y][x - 1] == 'o') {
-                    kierunek = 2;
+            case 'G': {
+                if (tablica_odpowiedzi[y-1][x - 1] == 'o') {
+                    kierunek = 'L';
                 }
-                if (tablica_odpowiedzi[y][x] == 'o') {
+                else if (tablica_odpowiedzi[y-1][x] == 'o') {
                     tablica_zgadywanek[start_y][start_x] = 'H';
                     return;
                 }
-                if (tablica_odpowiedzi[y][x + 1] == 'o') {
-                    kierunek = 1;
+                else if (tablica_odpowiedzi[y-1][x + 1] == 'o') {
+                    kierunek = 'P';
+                }
+                else {
+                    y--;
                 }
                 break;
             }
-            case 4: {
-                y++;
-                if (tablica_odpowiedzi[y][x - 1] == 'o') {
-                    kierunek = 1;
+            case 'D': {
+                if (tablica_odpowiedzi[y+1][x - 1] == 'o') {
+                    kierunek = 'P';
                 }
-                if (tablica_odpowiedzi[y][x] == 'o') {
+                else if (tablica_odpowiedzi[y+1][x] == 'o') {
                     tablica_zgadywanek[start_y][start_x] = 'H';
                     return;
                 }
-                if (tablica_odpowiedzi[y][x + 1] == 'o') {
-                    kierunek = 2;
+                else if (tablica_odpowiedzi[y+1][x + 1] == 'o') {
+                    kierunek = 'L';
+                }
+                else {
+                    y++;
                 }
                 break;
             }
         }
     }
+    while (w_polu(x, y, rozmiar_tablicy));
+
     if (start_x == x && start_y == y) {
         tablica_zgadywanek[start_y][start_x] = 'R';
         return;
@@ -258,257 +280,290 @@ void strzal(char** tablica_odpowiedzi, char** tablica_zgadywanek, int x, int y, 
 
 }
 
-void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_tablicy)
+void gameLoop(char **tablica_odpowiedzi, char** tablica_zgadywanek, int rozmiar_tablicy, int ilosc_atomow)
 {
     int focusedX = 0, focusedY = 0;
     int szufladka = '0';
 
-    vector<pair<int, int>> undo;
-    vector<pair<int, int>> redo;
+    ListaWspolrzednych undo = utworzListeWspolrzednych(ilosc_atomow);
+    ListaWspolrzednych redo = utworzListeWspolrzednych(ilosc_atomow);
 
-    while (true)
-    {
+    while (true) {
         system("cls");
-        switch (rozmiar_tablicy)
-        {
-            case 7:
-            {
-                print5x5(rozmiar_tablicy, tablica_zgadywanek, focusedX, focusedY);
+        switch (rozmiar_tablicy) {
+            case 7: {
+                print5x5(rozmiar_tablicy, tablica_zgadywanek);
+                cout << "x: " << focusedX << " y: " << focusedY << endl;
+                menuGry();
                 break;
             }
-            case 10:
-            {
-                print8x8(rozmiar_tablicy, tablica_zgadywanek, focusedX, focusedY);
+            case 10: {
+                print8x8(rozmiar_tablicy, tablica_zgadywanek);
+                cout << "x: " << focusedX << " y: " << focusedY << endl;
+                menuGry();
                 break;
             }
-            case 12:
-            {
-                print10x10(rozmiar_tablicy, tablica_zgadywanek, focusedX, focusedY);
+            case 12: {
+                print10x10(rozmiar_tablicy, tablica_zgadywanek);
+                cout << "x: " << focusedX << " y: " << focusedY << endl;
+                menuGry();
                 break;
             }
         }
+
         char key;
         cin >> key;
-        if (validation(key))
-        {
-            switch (toupper(key))
-            {
-                case 'W':
-                {
-                    if (focusedY > 0)
-                    {
-                        focusedY--;
-                    }
-                    break;
-                }
-                case 'S':
-                {
-                    if (focusedY < rozmiar_tablicy)
-                    {
-                        focusedY++;
-                    }
-                    break;
-                }
-                case 'A':
-                {
-                    if (focusedX > 0)
-                    {
-                        focusedX--;
-                    }
-                    break;
-                }
-                case 'D':
-                {
-                    if (focusedX < rozmiar_tablicy)
-                    {
-                        focusedX++;
-                    }
-                    break;
-                }
-                case 'Q':
-                {
-                    return;
-                }
-                case 'U':
-                {
-                    if (!undo.empty())
-                    {
-                        tablica_zgadywanek[undo.back().second][undo.back().first] = ' ';
-                        redo.push_back(undo.back());
-                        undo.erase(undo.end() - 1);
-                    }
-                    break;
-                }
-                case 'R':
-                {
-                    if (!redo.empty())
-                    {
-                        tablica_zgadywanek[redo.back().second][redo.back().first] = 'o';
-                        undo.push_back(redo.back());
-                        redo.erase(redo.end() - 1);
-                    }
-                    break;
-                }
-                case 'O':
-                {
-                    tablica_zgadywanek[focusedY][focusedX] = 'o';
-                    pair<int, int> p;
-                    p.first = focusedX;
-                    p.second = focusedY;
-                    undo.push_back(p);
-                    break;
-                }
-                case 'K':
-                {
-                    int sumaWygranych = 0;
-                    for (int i = 1; i < rozmiar_tablicy - 1; ++i)
-                    {
-                        for (int j = 1; j < rozmiar_tablicy - 1; ++j)
-                        {
-                            if (tablica_zgadywanek[i][j] == 'o' && tablica_odpowiedzi[i][j] == 'o')
-                            {
-                                sumaWygranych++;
-                            }
-                        }
-                    }
 
-                    cout << "Koniec. Liczba uzyskanych punktow: " << sumaWygranych << endl;
-                    cout << "Nacisnij enter by kontynuowac." << endl;
-                    char a;
-                    cin >> a;
-                    return;
+        switch (toupper(key)) {
+            case 'W': {
+                if (focusedY > 0) {
+                    focusedY--;
                 }
-                case 'P':
-                {
-                    system("cls");
-                    switch (rozmiar_tablicy)
-                    {
-                        case 7:
-                        {
-                            print5x5(rozmiar_tablicy, tablica_odpowiedzi, -1, -1);
-                            break;
+                break;
+            }
+            case 'S': {
+                if (focusedY < rozmiar_tablicy) {
+                    focusedY++;
+                }
+                break;
+            }
+            case 'A': {
+                if (focusedX > 0) {
+                    focusedX--;
+                }
+                break;
+            }
+            case 'D': {
+                if (focusedX < rozmiar_tablicy) {
+                    focusedX++;
+                }
+                break;
+            }
+            case 'Q': {
+                return;
+            }
+            case 'U': {
+                if (undo.ilosc_elementow > 0) {
+                    Wspolrzedne wspolrzedne = undo.lista[undo.ilosc_elementow - 1];
+                    tablica_zgadywanek[wspolrzedne.y][wspolrzedne.x] = ' ';
+                    dodajElementListaWspolrzednych(redo, wspolrzedne);
+                    usunOstatniElementListaWspolrzednych(undo);
+                }
+                break;
+            }
+            case 'R': {
+                if (redo.ilosc_elementow > 0) {
+                    Wspolrzedne wspolrzedne = redo.lista[redo.ilosc_elementow - 1];
+                    tablica_zgadywanek[wspolrzedne.y][wspolrzedne.x] = 'o';
+                    dodajElementListaWspolrzednych(undo, wspolrzedne);
+                    usunOstatniElementListaWspolrzednych(redo);
+                }
+                break;
+            }
+            case 'O': {
+                if (focusedX >= 1 && focusedX <= rozmiar_tablicy && focusedY >= 1 && focusedY <= rozmiar_tablicy) {
+                    if (tablica_zgadywanek[focusedY][focusedX] == ' ') {
+                        tablica_zgadywanek[focusedY][focusedX] = 'o';
+                        Wspolrzedne wspolrzedne;
+                        wspolrzedne.x = focusedX;
+                        wspolrzedne.y = focusedY;
+                        dodajElementListaWspolrzednych(undo, wspolrzedne);
+                    }
+                }
+                break;
+            }
+            case 'K': {
+                int sumaWygranych = 0;
+                for (int i = 1; i < rozmiar_tablicy - 1; ++i) {
+                    for (int j = 1; j < rozmiar_tablicy - 1; ++j) {
+                        if (tablica_zgadywanek[i][j] == 'o' && tablica_odpowiedzi[i][j] == 'o') {
+                            sumaWygranych++;
+                            tablica_odpowiedzi[i][j] = 'O';
                         }
-                        case 10:
-                        {
-                            print8x8(rozmiar_tablicy, tablica_odpowiedzi, -1, -1);
-                            break;
-                        }
-                        case 12:
-                        {
-                            print10x10(rozmiar_tablicy, tablica_odpowiedzi, -1, -1);
-                            break;
+                        else if (tablica_zgadywanek[i][j] == 'o') {
+                            tablica_odpowiedzi[i][j] = 'X';
                         }
                     }
-                    cout << "Nacisnij dowolny przycisk i enter aby kontynuowac" << endl;
-                    char a;
-                    cin >> a;
-                    return;
                 }
-                case 'H':
-                {
-                    system("cls");
-                    switch(rozmiar_tablicy)
-                    {
-                        case 7:
-                        {
-                            print5x5(rozmiar_tablicy, tablica_odpowiedzi, focusedX, focusedY);
-                            break;
-                        }
-                        case 10:
-                        {
-                            print8x8(rozmiar_tablicy, tablica_odpowiedzi, focusedX, focusedY);
-                            break;
-                        }
-                        case 12:
-                        {
-                            print10x10(rozmiar_tablicy, tablica_odpowiedzi, focusedX, focusedY);
-                            break;
-                        }
-                    }
 
-                    Sleep(5000);
-
-                    break;
-                }
-                case 'M':
-                {
-                    // do zrobienia
-                    if (focusedX == 0 || focusedY == 0 || focusedX == rozmiar_tablicy - 1 || focusedY == rozmiar_tablicy - 1)
-                    {
-                        strzal(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy, focusedX, focusedY, szufladka);
+                system("cls");
+                switch (rozmiar_tablicy) {
+                    case 7: {
+                        print5x5(rozmiar_tablicy, tablica_odpowiedzi);
+                        break;
                     }
-                    break;
+                    case 10: {
+                        print8x8(rozmiar_tablicy, tablica_odpowiedzi);
+                        break;
+                    }
+                    case 12: {
+                        print10x10(rozmiar_tablicy, tablica_odpowiedzi);
+                        break;
+                    }
                 }
+
+                cout << "Koniec. Liczba uzyskanych punktow: " << sumaWygranych << " z " << ilosc_atomow << "." << endl;
+                cout << "O => poprawnie oznaczony atom" << endl;
+                cout << "o => nieodgadniety atom" << endl;
+                cout << "X => błednie oznaczony atom" << endl;
+
+                cout << endl;
+                cout << "Nacisnij dowolny klawisz i enter aby kontynuowac" << endl;
+                char a;
+                cin >> a;
+
+                return;
+            }
+            case 'P': {
+                system("cls");
+                switch (rozmiar_tablicy) {
+                    case 7: {
+                        print5x5(rozmiar_tablicy, tablica_odpowiedzi);
+                        break;
+                    }
+                    case 10: {
+                        print8x8(rozmiar_tablicy, tablica_odpowiedzi);
+                        break;
+                    }
+                    case 12: {
+                        print10x10(rozmiar_tablicy, tablica_odpowiedzi);
+                        break;
+                    }
+                }
+
+                cout << "Nacisnij dowolny klawisz i enter aby kontynuowac" << endl;
+                char a;
+                cin >> a;
+                return;
+            }
+            case 'H': {
+                system("cls");
+                switch (rozmiar_tablicy) {
+                    case 7: {
+                        print5x5(rozmiar_tablicy, tablica_odpowiedzi);
+                        break;
+                    }
+                    case 10: {
+                        print8x8(rozmiar_tablicy, tablica_odpowiedzi);
+                        break;
+                    }
+                    case 12: {
+                        print10x10(rozmiar_tablicy, tablica_odpowiedzi);
+                        break;
+                    }
+                }
+
+                Sleep(5000);
+
+                break;
+            }
+            case 'M': {
+                if (tablica_odpowiedzi[focusedY][focusedX] != ' ') {
+                }
+                else if (focusedX == 0 && focusedY == 0) {
+                }
+                else if (focusedX == rozmiar_tablicy && focusedY == rozmiar_tablicy) {
+                }
+                else if (focusedY == 0) {
+                    strzal(tablica_odpowiedzi, tablica_zgadywanek, 'D', focusedX, focusedY, rozmiar_tablicy, szufladka);
+                }
+                else if (focusedY == rozmiar_tablicy) {
+                    strzal(tablica_odpowiedzi, tablica_zgadywanek, 'G', focusedX, focusedY, rozmiar_tablicy, szufladka);
+                }
+                else if (focusedX == 0) {
+                    strzal(tablica_odpowiedzi, tablica_zgadywanek, 'P', focusedX, focusedY, rozmiar_tablicy, szufladka);
+                }
+                else if (focusedX == rozmiar_tablicy) {
+                    strzal(tablica_odpowiedzi, tablica_zgadywanek, 'L', focusedX, focusedY, rozmiar_tablicy, szufladka);
+                }
+                break;
             }
         }
     }
 }
 
-struct s{
+char menuGlowne()
+{
+    system("cls");
+    cout << endl;
 
-};
+    cout << "    ____    _                  _        ____                      _____                              " << endl;
+    cout << "   |  _ \\  | |                | |      |  _ \\                    / ____|                             " << endl;
+    cout << "   | |_) | | |   __ _    ___  | | __   | |_) |   ___   __  __   | |  __    __ _   _ __ ___     ___   " << endl;
+    cout << "   |  _ <  | |  / _` |  / __| | |/ /   |  _ <   / _ \\  \\ \\/ /   | | |_ |  / _` | | '_ ` _ \\   / _ \\  " << endl;
+    cout << "   | |_) | | | | (_| | | (__  |   <    | |_) | | (_) |  >  <    | |__| | | (_| | | | | | | | |  __/  " << endl;
+    cout << "   |____/  |_|  \\__,_|  \\___| |_|\\_\\   |____/   \\___/  /_/\\_\\    \\_____|  \\__,_| |_| |_| |_|  \\___|  " << endl;
+    cout << "                                                                                                     " << endl;
+    cout << "                                                                                                     " << endl;
 
-struct s1{
-    s tab[5];
-};
+    cout << "Autor: Karolina Pioterek (nr indeksu 197843)" << endl;
+    cout << endl;
 
+    cout << "Wybierz stopien trudnosci gry:" << endl;
+    cout << "1 => plansza 5x5 (3 atomy)" << endl;
+    cout << "2 => plansza 8x8 (6 atomow)" << endl;
+    cout << "3 => plansza 10x10 (8 atomow)" << endl;
+    cout << "q => wyjscie" << endl;
+
+    char rezultat_wybrania_z_menu;
+    cin >> rezultat_wybrania_z_menu;
+    return rezultat_wybrania_z_menu;
+}
 
 int main()
 {
-    s1 aaa = {
-            {s{}, s{}, s{}}
-    };
+
     int tablica[5];
 
     while (true)
     {
         system("cls");
-        int rezultat_wybrania_z_menu = menu();
+        int rezultat_wybrania_z_menu = menuGlowne();
 
         char **tablica_odpowiedzi;
         char **tablica_zgadywanek;
         int rozmiar_tablicy;
+        int ilosc_atomow;
 
-        switch (rezultat_wybrania_z_menu)
+        switch (toupper(rezultat_wybrania_z_menu))
         {
-            case 1:
+            case '1':
             {
-                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(7);
-                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(7);
-                wypelnij_tablice(7, tablica_odpowiedzi, 3);
                 rozmiar_tablicy = 7;
-                gameLoop(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy);
+                ilosc_atomow = 3;
+                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(rozmiar_tablicy);
+                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(rozmiar_tablicy);
+                losuj(rozmiar_tablicy, tablica_odpowiedzi, ilosc_atomow);
+                gameLoop(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy, ilosc_atomow);
                 break;
             }
-            case 2:
+            case '2':
             {
-                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(10);
-                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(10);
-                wypelnij_tablice(10, tablica_odpowiedzi, 6);
                 rozmiar_tablicy = 10;
-                gameLoop(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy);
+                ilosc_atomow = 6;
+                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(rozmiar_tablicy);
+                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(rozmiar_tablicy);
+                losuj(rozmiar_tablicy, tablica_odpowiedzi, ilosc_atomow);
+                gameLoop(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy, ilosc_atomow);
                 break;
             }
-            case 3:
+            case '3':
             {
-                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(12);
-                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(12);
-                wypelnij_tablice(12, tablica_odpowiedzi, 8);
                 rozmiar_tablicy = 12;
-                gameLoop(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy);
+                ilosc_atomow = 8;
+                tablica_odpowiedzi = tworzenie_tablicy_dwu_wymiarowej(rozmiar_tablicy);
+                tablica_zgadywanek = tworzenie_tablicy_dwu_wymiarowej(rozmiar_tablicy);
+                losuj(rozmiar_tablicy, tablica_odpowiedzi, ilosc_atomow);
+                gameLoop(tablica_odpowiedzi, tablica_zgadywanek, rozmiar_tablicy, ilosc_atomow);
                 break;
             }
-            case 4:
+            case 'Q':
             {
-                // ustawienia
-                continue;
-            }
-            case 5:
-            {
-                exit(0);
+                return 0;
             }
         }
 
-        delete tablica_odpowiedzi, tablica_zgadywanek;
+        delete tablica_odpowiedzi;
+        delete tablica_zgadywanek;
     }
 }
